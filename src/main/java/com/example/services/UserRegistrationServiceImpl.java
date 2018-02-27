@@ -26,11 +26,23 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	public User saveUserInfo(User userinfo,Set<Role> roles) {
 		String pw_hash = BCrypt.hashpw(userinfo.getPassword(), BCrypt.gensalt());
 		userinfo.setPassword(pw_hash);
+		List<Role> savedRoles=(List<Role>)roleRepository.findAll();
 		for(Role role:roles){
-			roleRepository.save(role);
+			if(!this.isRoleSaved(savedRoles,role) || savedRoles==null) {
+				roleRepository.save(role);
+			}
 		}
 		userinfo.getRoles().addAll(roles);
 		return userInfoRepository.save(userinfo);
+	}
+
+	private boolean isRoleSaved(List<Role> savedRoles, Role role) {
+		for(Role r:savedRoles) {
+			if(r.getName().equalsIgnoreCase(role.getName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
