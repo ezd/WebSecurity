@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	private static final String[] RESOURCES = {
 			"/css/**","/js/**","/","/webjars/**","/login","/publicinfo","/contactus","/aboutus","/saveUser","/forgetPassword"
-			,"/updatePassword","/register"
+			,"/updatePassword","/register","/h2-console/**"
 	};
 	
 
@@ -44,7 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .loginPage("/login").defaultSuccessUrl("/limited/info")
             .and()
 			.logout().invalidateHttpSession(true).permitAll()
-			.and();
+			.and().csrf().disable();;
+		http.headers().frameOptions().disable();
 		
 //		http
 //			.authorizeRequests()
